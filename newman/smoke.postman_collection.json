@@ -6,6 +6,17 @@
   "item": [
     {
       "name": "Health",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "GET",
         "url": {"raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"]}
@@ -13,19 +24,23 @@
     },
     {
       "name": "Size Predict OK",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status is 200', function () { pm.response.to.have.status(200); });",
+              "var body = pm.response.json();",
+              "pm.test('has recommended_size', function () { pm.expect(body.recommended_size).to.exist; });"
+            ]
+          }
+        }
+      ],
       "request": {
         "method": "POST",
         "header": [{"key": "Content-Type", "value": "application/json"}],
         "body": {"mode": "raw", "raw": "{\n  \"height_cm\": 172,\n  \"weight_kg\": 68,\n  \"gender\": \"male\"\n}"},
-        "url": {"raw": "{{baseUrl}}/size/predict", "host": ["{{baseUrl}}"], "path": ["size", "predict"]}
-      }
-    },
-    {
-      "name": "Size Predict Invalid",
-      "request": {
-        "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
-        "body": {"mode": "raw", "raw": "{\n  \"height_cm\": \"bad\"\n}"},
         "url": {"raw": "{{baseUrl}}/size/predict", "host": ["{{baseUrl}}"], "path": ["size", "predict"]}
       }
     }
